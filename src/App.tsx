@@ -6,16 +6,12 @@ import Loader from "./components/Loader/Loader";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "./components/ImageModal/ImageModal";
+import { Image } from "./types";
 import { Toaster } from "react-hot-toast";
 import "./App.css";
 
-interface Image {
-  id: string;
-  urls: { small: string; regular: string };
-  alt_description: string;
-}
-
 const ACCESS_KEY = "T0VycIvJ_66qnoa1i83cVrkkFp_R0MJxLstqnhDCAuM";
+
 const App: React.FC = () => {
   const [images, setImages] = useState<Image[]>([]);
   const [query, setQuery] = useState<string>("");
@@ -55,10 +51,13 @@ const App: React.FC = () => {
     <div className="app">
       <SearchBar onSubmit={handleSearch} />
       {error && <ErrorMessage message={error} />}
-      <ImageGallery images={images} onClick={setSelectedImage} />
+      <ImageGallery
+        images={images}
+        onClick={(image: Image) => setSelectedImage(image)}
+      />
       {isLoading && <Loader />}
       {images.length > 0 && !isLoading && (
-        <LoadMoreBtn onClick={loadMoreImages} />
+        <LoadMoreBtn onClick={loadMoreImages} isLoading={isLoading} />
       )}
       {selectedImage && (
         <ImageModal
