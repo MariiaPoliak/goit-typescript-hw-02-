@@ -12,6 +12,12 @@ import "./App.css";
 
 const ACCESS_KEY = "T0VycIvJ_66qnoa1i83cVrkkFp_R0MJxLstqnhDCAuM";
 
+interface UnsplashResponse {
+  results: Image[];
+  total: number;
+  total_pages: number;
+}
+
 const App: React.FC = () => {
   const [images, setImages] = useState<Image[]>([]);
   const [query, setQuery] = useState<string>("");
@@ -25,7 +31,7 @@ const App: React.FC = () => {
 
     setIsLoading(true);
     axios
-      .get("https://api.unsplash.com/search/photos", {
+      .get<UnsplashResponse>("https://api.unsplash.com/search/photos", {
         params: { query, page, per_page: 12 },
         headers: { Authorization: `Client-ID ${ACCESS_KEY}` },
       })
